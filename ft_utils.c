@@ -22,7 +22,7 @@ int	ft_pchr (char *str, char c)
 	return (-1);
 }
 
-char	*ft_str_ncmp (char *str, unsigned int n)
+char	*ft_str_ndup (char *str, unsigned int n)
 {
 	char				*duped;
 	unsigned int		i;
@@ -76,7 +76,7 @@ char	**ft_str_split (char *str, char div)
 		j = 0;
 		while (str[j] && str[j] != div)
 			j++;
-		matrix[i++] = str_ndup(str, j);
+		matrix[i++] = ft_str_ndup(str, j);
 		str = str + j + 1;
 	}
 	return (matrix);

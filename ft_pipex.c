@@ -2,17 +2,16 @@
 
 #include <stdio.h>
 
-#include <sys/types.h>
-#include <sys/wait.h>
-
 int	openfile(char *filename, int mode)
 {
 	if (mode == 0)
 	{
 		if (access(filename, F_OK))
 		{
+			write(STDERR, "pipex: ", 7);
+			write(STDERR, filename, ft_pchr(filename, 0));
 			write(2, "File does not exist.\n", 7);
-			return (0);
+			return (STDIN);
 		}
 		return (open(filename, O_RDONLY));
 	}
@@ -34,13 +33,14 @@ char	*getPath(char *cmd, char **env)
 	if (!env[i])
 		return (cmd);
 	path = env[i] + 5;
-	while (path && ft_pchr(path, ':') > -1);
+	while (path && ft_pchr(path, ':') > -1)
 	{
-		dir = ft_str_ncmp(path, ft_pchr(path, ':'));
+		dir = ft_str_ndup(path, ft_pchr(path, ':'));
 		bin = path_join(dir, cmd);
 		free(dir);
 		if (access(bin, F_OK) == 0)
 			return (bin);
+		free(bin);
 		path += ft_pchr(path, ':') + 1;
 	}
 	return (cmd);
@@ -59,6 +59,7 @@ void	exec(char *cmd, char **env)
 	else
 		path = getPath(args[0], env);
 	// eseguo il comando
+	printf("Comando: %s\n", path);
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
 	write(STDERR, cmd, ft_pchr(cmd, 0));
