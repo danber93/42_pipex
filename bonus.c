@@ -93,16 +93,19 @@ int		main(int ac, char **av, char **env)
 {
 	int	fdin;
 	int	fdout;
+	int	i;
 
-	if (ac == 5)
+	i = 2;
+	if (ac >= 5)
 	{
 		fdin = openfile(av[1], INFILE);
-		fdout  = openfile(av[4], OUTFILE);
+		fdout  = openfile(av[ac-1], OUTFILE);
   		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
-		// redir(av[2], env, fdin);
-		redir(av[2], env);
-		exec(av[3], env);
+
+		while (i < ac - 2)
+			redir(av[i++], env);
+		exec(av[i], env);
 	}
 	else
 		write(STDERR, "Invalid number  of arguments.\n", 29);
