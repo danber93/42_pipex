@@ -10,6 +10,20 @@ int	ft_str_ncmp (char *str1, char *str2, int n)
 	return (*str2 - *str1);
 }
 
+int ft_str_cmp(char *str1, char *str2)
+{
+	int	i;
+
+	i = 0;
+	while (str1[i] || str2[i])
+	{
+		if (!str1[i] || !str2[i] || (str1[i] != str2[i]))
+			return (0);
+		i++;
+	}
+	return 1;
+}
+
 int	ft_pchr (char *str, char c)
 {
 	int	i;
@@ -80,4 +94,37 @@ char	**ft_str_split (char *str, char div)
 		str = str + j + 1;
 	}
 	return (matrix);
+}
+
+int	ft_str_len(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+char*	ft_str_rall(char *buff, char ch)
+{
+	char	*res;
+	int		len;
+
+	printf("Prima del sgfault");
+	if (!buff)
+	{
+		buff = (char *)malloc(sizeof(char) * 2);
+		buff[0] = ch;
+		buff[1] = '\0';
+		return buff;
+	}
+	len = ft_str_len(buff);
+	res = (char *)malloc(sizeof(char) * (len+2));
+	res[len+1] = '\0';
+	res[len] = ch;
+	while (len > -1)
+		res[len] = buff[len];
+	free(buff);
+	return res;
 }

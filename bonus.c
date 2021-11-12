@@ -89,6 +89,34 @@ void	redir(char *cmd, char **env)
 	}
 }
 
+void	ft_here_doc(int ac, char **av, char **env)
+{
+	// Questi solo per compilare, vanno eliminati
+	av[0] = "4";
+	env = NULL;
+	ac = ac + 1;
+	// ------
+	char	*buff;
+	char	ch;
+	int		kpp_rdng;
+
+	// if (ac <= 5)
+	// {
+	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
+	// 	exit(1);
+	// }
+	kpp_rdng = 1;
+	while(kpp_rdng)
+	{
+		read(STDIN, &ch, 1);
+		printf("ch = %c\n", ch);
+		buff = ft_str_rall(buff, ch);
+		if (ft_str_cmp(buff, av[2]))
+			kpp_rdng = 0;
+	}
+	printf("Ho letto fino allo spazio. buff = %s\n", buff);
+}
+
 int		main(int ac, char **av, char **env)
 {
 	int	fdin;
@@ -96,13 +124,14 @@ int		main(int ac, char **av, char **env)
 	int	i;
 
 	i = 2;
-	if (ac >= 5)
+	if (av[1] && ft_str_cmp(av[1], "here_doc"))
+		ft_here_doc(ac, av, env);
+	else if (ac >= 5)
 	{
 		fdin = openfile(av[1], INFILE);
 		fdout  = openfile(av[ac-1], OUTFILE);
   		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
-
 		while (i < ac - 2)
 			redir(av[i++], env);
 		exec(av[i], env);
