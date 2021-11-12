@@ -111,8 +111,7 @@ char*	ft_str_rall(char *buff, char ch)
 	char	*res;
 	int		len;
 
-	printf("Prima del sgfault");
-	if (!buff)
+	if (buff == NULL)
 	{
 		buff = (char *)malloc(sizeof(char) * 2);
 		buff[0] = ch;
@@ -121,10 +120,36 @@ char*	ft_str_rall(char *buff, char ch)
 	}
 	len = ft_str_len(buff);
 	res = (char *)malloc(sizeof(char) * (len+2));
+	// TODO: non funziona la riallocazione della memoria!!!!
 	res[len+1] = '\0';
 	res[len] = ch;
 	while (len > -1)
+	{
 		res[len] = buff[len];
+		len--;
+	}
 	free(buff);
 	return res;
+}
+
+/* Check if str2 is contained in str1 */
+int		ft_str_cntn(char *str1, char* str2)
+{
+	int	i;
+	int	j;
+
+	printf("buff = %s\n", str1);
+	i = 0;
+	while(str1[i])
+	{
+		j = 0;
+		while (str2[j] && str1[i+j] == str2[j])
+		{
+				j++;
+		}
+		if (!str2[j])
+			return (1);
+		i++;
+	}
+	return (0);
 }
