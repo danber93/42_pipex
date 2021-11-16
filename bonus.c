@@ -93,31 +93,26 @@ void	ft_here_doc(int ac, char **av, char **env)
 {
 	// Questi solo per compilare, vanno eliminati
 	av[0] = "4";
-	env = NULL;
 	ac = ac + 1;
 	// ------
 	char	*buff;
 	char	ch[2];
-	int		kpp_rdng;
 
 	// if (ac <= 5)
 	// {
 	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
 	// 	exit(1);
 	// }
-	kpp_rdng = 1;
 	buff = NULL;
 	printf("av[2] = %s\n", av[2]);
 	while(read(STDIN, ch, 1))
 	{
-		printf("ch = %s\n", ch);
 		buff = ft_str_rall(buff, ch[0]);
-		ch[1] = 0;
-		printf("string is contained? = %i\n", ft_str_cntn(buff, av[2]));
 		if (ft_str_cntn(buff, av[2]))
 			break;
 	}
-	// printf("Ho letto fino allo spazio. buff = %s\n", buff);
+	printf("Ho letto fino alla stringa di DELIMITER. buff = %s\n", buff);
+	ft_extract_env_vars(buff, env);
 }
 
 int		main(int ac, char **av, char **env)
@@ -125,6 +120,7 @@ int		main(int ac, char **av, char **env)
 	int	fdin;
 	int	fdout;
 	int	i;
+	printf("env[0] = %s", env[0]);
 
 	i = 2;
 	if (av[1] && ft_str_cmp(av[1], "here_doc"))

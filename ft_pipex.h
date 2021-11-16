@@ -23,5 +23,6 @@ char	**ft_str_split (char *str, char div);
 int	ft_str_cmp(char *str1, char *str2);
 char*	ft_str_rall(char *buff, char ch);
 int		ft_str_cntn(char *str1, char* str2);
+char	*ft_extract_env_vars(char *buff, char **env);
 
 #endif 

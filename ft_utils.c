@@ -106,30 +106,45 @@ int	ft_str_len(char *str)
 	return (i);
 }
 
+char* ft_calloc(size_t size, size_t count)
+{
+	char	*new;
+	size_t	i;
+
+	new = malloc(size * (count + 1));
+	if (!new)
+		return (NULL);
+	i = 0;
+	while (i < count)
+		new[i++] = '\0';
+	new[i] = 0;
+	return (new);
+}
+
 char*	ft_str_rall(char *buff, char ch)
 {
-	char	*res;
+	char	*new;
 	int		len;
+	int		i;
 
 	if (buff == NULL)
 	{
-		buff = (char *)malloc(sizeof(char) * 2);
+		buff = ft_calloc(sizeof(char), 1);
 		buff[0] = ch;
-		buff[1] = '\0';
 		return buff;
 	}
 	len = ft_str_len(buff);
-	res = (char *)malloc(sizeof(char) * (len+2));
-	// TODO: non funziona la riallocazione della memoria!!!!
-	res[len+1] = '\0';
-	res[len] = ch;
-	while (len > -1)
+	new = ft_calloc(sizeof(char), len + 1);
+	new[len] = ch;
+	i = 0;
+	while (i < len)
 	{
-		res[len] = buff[len];
-		len--;
+		new[i] = buff[i];
+		i++;
 	}
+	new[i] = ch;
 	free(buff);
-	return res;
+	return (new);
 }
 
 /* Check if str2 is contained in str1 */
@@ -138,7 +153,6 @@ int		ft_str_cntn(char *str1, char* str2)
 	int	i;
 	int	j;
 
-	printf("buff = %s\n", str1);
 	i = 0;
 	while(str1[i])
 	{
@@ -152,4 +166,10 @@ int		ft_str_cntn(char *str1, char* str2)
 		i++;
 	}
 	return (0);
+}
+
+/* Select ENV var. 0 END, 1 found ONE so keep going */
+char	*ft_extract_env_vars(char *buff, char **env)
+{
+
 }
