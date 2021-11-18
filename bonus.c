@@ -115,6 +115,74 @@ void	ft_here_doc(int ac, char **av, char **env)
 	ft_extract_env_vars(buff, env);
 }
 
+size_t		ft_is_space(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\v' || c == '\n' || c == '\r'
+		|| c == '\f');
+}
+
+char	*ft_name_env(char *buff, int start_index, int len)
+{
+	int		i;
+	char	*name;
+	
+	i = 0;
+	name = ft_calloc(len);
+	if (!name)
+		return (NULL);
+	while (i < len)
+	{
+		name[i] = buff[start_index + i];
+		i++;
+	}
+	return name;
+}
+
+char	*ft_get_value_env(char	*name, char **env)
+{
+	char	**tmp;
+	char	*value;
+	int		i;
+
+	i = 0;
+	value = ft_calloc(0);
+	while (env[i])
+	{
+		tmp = ft_str_split(env[i], "=");
+		if (!ft_str_cmp(tmp[0], name))
+		{
+			value = ft_str_dup(tmp[1]);
+			return value;
+		}
+		i++;
+	}
+	return value;
+
+}
+
+char	*ft_extract_env_vars(char *buff, char **env)
+{
+	int		dollar_index;
+	int		i;
+	char	*name_env;
+	char	*value_env;
+
+	i = 0;
+	dollar_index = ft_pchr(buff, "$");
+	if (dollar_index > -1 && buff[dollar_index + 1])
+	{
+		while (buff[dollar_index + i] && !ft_is_space(buff[dollar_index + i]))
+			i++;
+		if (i > 0)
+		{
+			name_env = ft_name_env(buff, dollar_index + 1, i);
+			value_env = ft_get_value_env(name_env, env);
+			// a questo punto dobbiamo ri mallocare il buff e inserire il valore della variabile d'ambiente
+		}
+
+	}
+}
+
 int		main(int ac, char **av, char **env)
 {
 	int	fdin;

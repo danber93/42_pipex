@@ -135,7 +135,7 @@ char*	ft_str_rall(char *buff, char ch)
 	}
 	len = ft_str_len(buff);
 	new = ft_calloc(sizeof(char), len + 1);
-	new[len] = ch;
+	// new[len] = ch;
 	i = 0;
 	while (i < len)
 	{
