@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-int	openfile(char *filename, int mode)
+int		openfile(char *filename, int mode)
 {
 	if (mode == 0)
 	{
@@ -115,7 +115,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 	ft_extract_env_vars(buff, env);
 }
 
-size_t		ft_is_space(char c)
+size_t	ft_is_space(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\v' || c == '\n' || c == '\r'
 		|| c == '\f');
@@ -132,7 +132,7 @@ char	*ft_name_env(char *buff, int start_index, int len)
 		return (NULL);
 	while (i < len)
 	{
-		name[i] = buff[start_index + i];
+		name[i] = buff[start_index + i];
 		i++;
 	}
 	return name;
@@ -160,6 +160,31 @@ char	*ft_get_value_env(char	*name, char **env)
 
 }
 
+char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
+{
+	int		i;
+	int		j;
+	int		k;
+	char	*dest;
+
+	i = 0;
+	j = 0;
+	dest = ft_calloc(ft_strlen(buff) + diff + 1);
+	while (buff[i] && i < env_start)
+		dest[j++] = buff[i++];
+	if (i == env_start)
+	{
+		k = 0;
+		while (k < ft_strlen(env_val))
+			dest[j++] = env_val[k++];
+	}
+	i = i + k - diff;
+	while (buff[i])
+		dest[j++] = buff[i++];
+	dest[j] = '\0';
+	return dest;
+}
+
 char	*ft_extract_env_vars(char *buff, char **env)
 {
 	int		dollar_index;
@@ -178,8 +203,11 @@ char	*ft_extract_env_vars(char *buff, char **env)
 			name_env = ft_name_env(buff, dollar_index + 1, i);
 			value_env = ft_get_value_env(name_env, env);
 			// a questo punto dobbiamo ri mallocare il buff e inserire il valore della variabile d'ambiente
+			buff = ft_env_filling(
+				buff, value_env,
+				i, ft_strlen(value_env) - ft_strlen(name_env) - 1);// -1 per includere il dollaro da cancellare
 		}
-
+		
 	}
 }
 

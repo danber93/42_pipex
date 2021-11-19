@@ -24,5 +24,6 @@ int		ft_str_cmp(char *str1, char *str2);
 char*	ft_str_rall(char *buff, char ch);
 int		ft_is_substr(char *str1, char* str2);
 char	*ft_extract_env_vars(char *buff, char **env);
+int		ft_strlen(char *str);
 
 #endif 

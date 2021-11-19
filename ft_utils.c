@@ -96,7 +96,7 @@ char	**ft_str_split (char *str, char div)
 	return (matrix);
 }
 
-int	ft_str_len(char *str)
+int	ft_strlen(char *str)
 {
 	int	i;
 
@@ -133,7 +133,7 @@ char*	ft_str_rall(char *buff, char ch)
 		buff[0] = ch;
 		return buff;
 	}
-	len = ft_str_len(buff);
+	len = ft_strlen(buff);
 	new = ft_calloc(sizeof(char), len + 1);
 	// new[len] = ch;
 	i = 0;
