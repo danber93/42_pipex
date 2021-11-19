@@ -177,10 +177,10 @@ char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
 		k = 0;
 		while (k < ft_strlen(env_val))
 			dest[j++] = env_val[k++];
+		i = i + k - diff;
+		while (buff[i])
+			dest[j++] = buff[i++];
 	}
-	i = i + k - diff;
-	while (buff[i])
-		dest[j++] = buff[i++];
 	dest[j] = '\0';
 	return dest;
 }
