@@ -1,6 +1,6 @@
 #include "ft_pipex.h"
 
-int	ft_str_ncmp (char *str1, char *str2, int n)
+int		ft_str_ncmp(char *str1, char *str2, int n)
 {
 	while (--n > 0 && *str1 && *str2 && *str1 == *str2)
 	{
@@ -10,7 +10,7 @@ int	ft_str_ncmp (char *str1, char *str2, int n)
 	return (*str2 - *str1);
 }
 
-int ft_str_cmp(char *str1, char *str2)
+int		ft_str_cmp(char *str1, char *str2)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ int ft_str_cmp(char *str1, char *str2)
 	return 1;
 }
 
-int	ft_pchr (char *str, char c)
+int		ft_pchr(char *str, char c)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ int	ft_pchr (char *str, char c)
 	return (-1);
 }
 
-char	*ft_str_ndup (char *str, unsigned int n)
+char	*ft_str_ndup(char *str, unsigned int n)
 {
 	char				*duped;
 	unsigned int		i;
@@ -49,7 +49,7 @@ char	*ft_str_ndup (char *str, unsigned int n)
 	return (duped);
 }
 
-char	*path_join (char *path, char *bin)
+char	*path_join(char *path, char *bin)
 {
 	char	*fullPath;
 	int		i;
@@ -68,7 +68,7 @@ char	*path_join (char *path, char *bin)
 	return (fullPath);
 }
 
-char	**ft_str_split (char *str, char div)
+char	**ft_str_split(char *str, char div)
 {
 	char	**matrix;
 	int		count;
@@ -96,7 +96,7 @@ char	**ft_str_split (char *str, char div)
 	return (matrix);
 }
 
-int	ft_strlen(char *str)
+int		ft_strlen(char *str)
 {
 	int	i;
 
@@ -106,7 +106,7 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char* ft_calloc(size_t size, size_t count)
+char*	ft_calloc(size_t size, size_t count)
 {
 	char	*new;
 	size_t	i;
@@ -171,5 +171,5 @@ int		ft_is_substr(char *str1, char* str2)
 /* Select ENV var. 0 END, 1 found ONE so keep going */
 char	*ft_extract_env_vars(char *buff, char **env)
 {
-
+	return NULL;
 }

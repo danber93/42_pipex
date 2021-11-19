@@ -112,7 +112,9 @@ void	ft_here_doc(int ac, char **av, char **env)
 			break;
 	}
 	printf("Ho letto fino alla stringa di DELIMITER. buff = %s\n", buff);
-	ft_extract_env_vars(buff, env);
+	buff = ft_extract_env_vars(buff, env);
+	printf("Ho sostituito i nomi delle variabili d'ambiente con i valori presi da env. buff = %s\n", buff);
+
 }
 
 size_t	ft_is_space(char c)
@@ -127,7 +129,7 @@ char	*ft_name_env(char *buff, int start_index, int len)
 	char	*name;
 	
 	i = 0;
-	name = ft_calloc(len);
+	name = ft_calloc(sizeof(char), len);
 	if (!name)
 		return (NULL);
 	while (i < len)
@@ -138,6 +140,25 @@ char	*ft_name_env(char *buff, int start_index, int len)
 	return name;
 }
 
+char	*ft_strdup(char *s1)
+{
+	char	*s2;
+	size_t	len;
+	size_t	i;
+
+	len = ft_strlen(s1);
+	if (!(s2 = (char *)malloc(sizeof(len + 1))))
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = 0;
+	return (s2);
+}
+
 char	*ft_get_value_env(char	*name, char **env)
 {
 	char	**tmp;
@@ -145,13 +166,13 @@ char	*ft_get_value_env(char	*name, char **env)
 	int		i;
 
 	i = 0;
-	value = ft_calloc(0);
+	value = ft_calloc(sizeof(char), 0);
 	while (env[i])
 	{
-		tmp = ft_str_split(env[i], "=");
+		tmp = ft_str_split(env[i], '=');
 		if (!ft_str_cmp(tmp[0], name))
 		{
-			value = ft_str_dup(tmp[1]);
+			value = ft_strdup(tmp[1]);
 			return value;
 		}
 		i++;
@@ -169,7 +190,7 @@ char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
 
 	i = 0;
 	j = 0;
-	dest = ft_calloc(ft_strlen(buff) + diff + 1);
+	dest = ft_calloc(sizeof(char), ft_strlen(buff) + diff + 1);
 	while (buff[i] && i < env_start)
 		dest[j++] = buff[i++];
 	if (i == env_start)
@@ -193,7 +214,7 @@ char	*ft_extract_env_vars(char *buff, char **env)
 	char	*value_env;
 
 	i = 0;
-	dollar_index = ft_pchr(buff, "$");
+	dollar_index = ft_pchr(buff, '$');
 	if (dollar_index > -1 && buff[dollar_index + 1])
 	{
 		while (buff[dollar_index + i] && !ft_is_space(buff[dollar_index + i]))
@@ -207,8 +228,8 @@ char	*ft_extract_env_vars(char *buff, char **env)
 				buff, value_env,
 				i, ft_strlen(value_env) - ft_strlen(name_env) - 1);// -1 per includere il dollaro da cancellare
 		}
-		
 	}
+	return buff;
 }
 
 int		main(int ac, char **av, char **env)
