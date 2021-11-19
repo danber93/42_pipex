@@ -148,7 +148,7 @@ char*	ft_str_rall(char *buff, char ch)
 }
 
 /* Check if str2 is contained in str1 */
-int		ft_str_cntn(char *str1, char* str2)
+int		ft_is_substr(char *str1, char* str2)
 {
 	int	i;
 	int	j;

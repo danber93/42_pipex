@@ -108,7 +108,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 	while(read(STDIN, ch, 1))
 	{
 		buff = ft_str_rall(buff, ch[0]);
-		if (ft_str_cntn(buff, av[2]))
+		if (ft_is_substr(buff, av[2]))
 			break;
 	}
 	printf("Ho letto fino alla stringa di DELIMITER. buff = %s\n", buff);
