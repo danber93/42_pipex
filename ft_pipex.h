@@ -27,5 +27,6 @@ char	*ft_extract_env_vars(char *buff, char **env);
 int		ft_strlen(char *str);
 char	*ft_calloc(size_t size, size_t count);
 char	*ft_strdup(char *s1);
+size_t	ft_is_space(char c);
 
 #endif

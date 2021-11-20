@@ -89,40 +89,6 @@ void	redir(char *cmd, char **env)
 	}
 }
 
-void	ft_here_doc(int ac, char **av, char **env)
-{
-	// Questi solo per compilare, vanno eliminati
-	av[0] = "4";
-	ac = ac + 1;
-	// ------
-	char	*buff;
-	char	ch[2];
-
-	// if (ac <= 5)
-	// {
-	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
-	// 	exit(1);
-	// }
-	buff = NULL;
-	printf("av[2] = %s\n", av[2]);
-	while(read(STDIN, ch, 1))
-	{
-		buff = ft_str_rall(buff, ch[0]);
-		if (ft_is_substr(buff, av[2]))
-			break;
-	}
-	printf("Ho letto fino alla stringa di DELIMITER. buff = %s\n", buff);
-	buff = ft_extract_env_vars(buff, env);
-	printf("Ho sostituito i nomi delle variabili d'ambiente con i valori presi da env. buff = %s\n", buff);
-
-}
-
-size_t	ft_is_space(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\v' || c == '\n' || c == '\r'
-		|| c == '\f');
-}
-
 char	*ft_name_env(char *buff, int start_index, int len)
 {
 	int		i;
@@ -140,25 +106,6 @@ char	*ft_name_env(char *buff, int start_index, int len)
 	return name;
 }
 
-char	*ft_strdup(char *s1)
-{
-	char	*s2;
-	size_t	len;
-	size_t	i;
-
-	len = ft_strlen(s1);
-	if (!(s2 = (char *)malloc(sizeof(len + 1))))
-		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = 0;
-	return (s2);
-}
-
 char	*ft_get_value_env(char	*name, char **env)
 {
 	char	**tmp;
@@ -170,7 +117,7 @@ char	*ft_get_value_env(char	*name, char **env)
 	while (env[i])
 	{
 		tmp = ft_str_split(env[i], '=');
-		if (!ft_str_cmp(tmp[0], name))
+		if (ft_str_cmp(tmp[0], name))
 		{
 			value = ft_strdup(tmp[1]);
 			return value;
@@ -178,7 +125,6 @@ char	*ft_get_value_env(char	*name, char **env)
 		i++;
 	}
 	return value;
-
 }
 
 char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
@@ -190,7 +136,7 @@ char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
 
 	i = 0;
 	j = 0;
-	dest = ft_calloc(sizeof(char), ft_strlen(buff) + diff + 1);
+	dest = ft_calloc(sizeof(char), ft_strlen(buff) + diff);
 	while (buff[i] && i < env_start)
 		dest[j++] = buff[i++];
 	if (i == env_start)
@@ -202,7 +148,8 @@ char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
 		while (buff[i])
 			dest[j++] = buff[i++];
 	}
-	dest[j] = '\0';
+	// dest[j] = '\0';
+	free(buff);
 	return dest;
 }
 
@@ -217,19 +164,47 @@ char	*ft_extract_env_vars(char *buff, char **env)
 	dollar_index = ft_pchr(buff, '$');
 	if (dollar_index > -1 && buff[dollar_index + 1])
 	{
+		dollar_index++;
 		while (buff[dollar_index + i] && !ft_is_space(buff[dollar_index + i]))
 			i++;
 		if (i > 0)
 		{
-			name_env = ft_name_env(buff, dollar_index + 1, i);
+			name_env = ft_name_env(buff, dollar_index, i);
 			value_env = ft_get_value_env(name_env, env);
 			// a questo punto dobbiamo ri mallocare il buff e inserire il valore della variabile d'ambiente
-			buff = ft_env_filling(
-				buff, value_env,
+			buff = ft_env_filling(buff, value_env,
 				i, ft_strlen(value_env) - ft_strlen(name_env) - 1);// -1 per includere il dollaro da cancellare
 		}
 	}
+	printf("buff = %s\n", buff);
 	return buff;
+}
+
+void	ft_here_doc(int ac, char **av, char **env)
+{
+	// Questi solo per compilare, vanno eliminati
+	// av[0] = "4";
+	ac = ac + 1;
+	// ------
+	char	*buff;
+	char	ch[2];
+
+	// if (ac <= 5)
+	// {
+	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
+	// 	exit(1);
+	// }
+	buff = NULL;
+	while(read(STDIN, ch, 1))
+	{
+		buff = ft_str_rall(buff, ch[0]);
+		if (ft_is_substr(buff, av[2]))
+			break;
+	}
+	printf("\nHo letto fino alla stringa di DELIMITER. buff = %s\n", buff);
+	buff = ft_extract_env_vars(buff, env);
+	printf("Ho sostituito i nomi delle variabili d'ambiente con i valori presi da env. buff = %s\n", buff);
+
 }
 
 int		main(int ac, char **av, char **env)
@@ -237,7 +212,6 @@ int		main(int ac, char **av, char **env)
 	int	fdin;
 	int	fdout;
 	int	i;
-	printf("env[0] = %s", env[0]);
 
 	i = 2;
 	if (av[1] && ft_str_cmp(av[1], "here_doc"))

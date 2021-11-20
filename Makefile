@@ -10,7 +10,7 @@ SRC = ft_pipex.c ft_utils.c
 
 OBJ = $(SRC:c=o)
 
-SRCB = bonus.c ft_utils.c
+SRCB = bonus.c ft_utils.c ft_utils_bonus.c
 
 OBJB = $(SRCB:c=o)
 
