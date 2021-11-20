@@ -153,6 +153,34 @@ char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff)
 	return dest;
 }
 
+char	*ft_replace(char *buff, char *env_val, int env_start, char *env_name) {
+	int		i;
+	int		j;
+	int		k;
+	char	*dest;
+	int		diff;
+
+	i = 0;
+	diff = ft_strlen(env_name) - ft_strlen(env_val);
+	dest = ft_calloc(sizeof(char), ft_strlen(buff) - diff);
+	while (i < env_start)
+	{
+		dest[i] = buff[i];
+		i++;
+	}
+	// stampiamo la dest
+	// printf("dest fase 1 = %s\n", dest);
+	j = 0;
+	while (j < ft_strlen(env_val))
+		dest[i++] = env_val[j++];
+	//printf("dest fase 2 = %s\n", dest);
+	k = env_start + ft_strlen(env_name) + 1;
+	while (buff[k])
+		dest[i++] = buff[k++];
+	//printf("dest fase 3 = %s\n", dest);
+	return dest;
+}
+
 char	*ft_extract_env_vars(char *buff, char **env)
 {
 	int		dollar_index;
@@ -171,12 +199,10 @@ char	*ft_extract_env_vars(char *buff, char **env)
 		{
 			name_env = ft_name_env(buff, dollar_index, i);
 			value_env = ft_get_value_env(name_env, env);
-			// a questo punto dobbiamo ri mallocare il buff e inserire il valore della variabile d'ambiente
-			buff = ft_env_filling(buff, value_env,
-				i, ft_strlen(value_env) - ft_strlen(name_env) - 1);// -1 per includere il dollaro da cancellare
+			buff = ft_replace(buff, value_env, dollar_index - 1, name_env);
 		}
 	}
-	printf("buff = %s\n", buff);
+	printf("buff finale = %s\n", buff);
 	return buff;
 }
 
@@ -201,10 +227,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 		if (ft_is_substr(buff, av[2]))
 			break;
 	}
-	printf("\nHo letto fino alla stringa di DELIMITER. buff = %s\n", buff);
 	buff = ft_extract_env_vars(buff, env);
-	printf("Ho sostituito i nomi delle variabili d'ambiente con i valori presi da env. buff = %s\n", buff);
-
 }
 
 int		main(int ac, char **av, char **env)

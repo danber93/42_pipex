@@ -6,21 +6,19 @@ size_t	ft_is_space(char c)
 		|| c == '\f');
 }
 
-char	*ft_strdup(char *s1)
+char	*ft_strdup(char *src)
 {
-	char	*s2;
+	char	*dest;
 	size_t	len;
 	size_t	i;
 
-	len = ft_strlen(s1);
-	if (!(s2 = (char *)malloc(sizeof(len + 1))))
-		return (NULL);
+	len = ft_strlen(src);
+	dest = ft_calloc(sizeof(char), len);
 	i = 0;
-	while (s1[i])
+	while (src[i])
 	{
-		s2[i] = s1[i];
+		dest[i] = src[i];
 		i++;
 	}
-	s2[i] = 0;
-	return (s2);
+	return (dest);
 }
