@@ -178,6 +178,7 @@ char	*ft_replace(char *buff, char *env_val, int env_start, char *env_name) {
 	while (buff[k])
 		dest[i++] = buff[k++];
 	//printf("dest fase 3 = %s\n", dest);
+	free(buff);
 	return dest;
 }
 
@@ -185,25 +186,54 @@ char	*ft_extract_env_vars(char *buff, char **env)
 {
 	int		dollar_index;
 	int		i;
+	int		j;
 	char	*name_env;
 	char	*value_env;
 
+	j = 0;
 	i = 0;
-	dollar_index = ft_pchr(buff, '$');
-	if (dollar_index > -1 && buff[dollar_index + 1])
+	while (buff[j])
 	{
-		dollar_index++;
-		while (buff[dollar_index + i] && !ft_is_space(buff[dollar_index + i]))
-			i++;
-		if (i > 0)
+		dollar_index = ft_pchr(buff, '$');
+		if (dollar_index > -1 && buff[dollar_index + 1])
 		{
-			name_env = ft_name_env(buff, dollar_index, i);
-			value_env = ft_get_value_env(name_env, env);
-			buff = ft_replace(buff, value_env, dollar_index - 1, name_env);
+			dollar_index++;
+			while (buff[dollar_index + i] && !ft_is_space(buff[dollar_index + i]))
+				i++;
+			if (i > 0)
+			{
+				name_env = ft_name_env(buff, dollar_index, i);
+				printf("name env = %s\n", name_env);
+				value_env = ft_get_value_env(name_env, env);
+				buff = ft_replace(buff, value_env, dollar_index - 1, name_env);
+			}
+			i = 0;
+			j = dollar_index;
 		}
+		else
+			j++;
 	}
-	printf("buff finale = %s\n", buff);
 	return buff;
+}
+
+char *ft_remove_delimiter(char *buff, char *delimiter)
+{
+	char	*dest;
+	int		delimiter_size;
+	int		i;
+	int		buff_size;
+
+	buff_size = ft_strlen(buff);
+	i = 0;
+	delimiter_size = ft_strlen(delimiter);
+	dest = ft_calloc(sizeof(char), (buff_size - delimiter_size));
+	while (i < (buff_size - delimiter_size))
+	{
+		dest[i] = buff[i];
+		i++;
+	}
+	free(buff);
+	return dest;
 }
 
 void	ft_here_doc(int ac, char **av, char **env)
@@ -228,6 +258,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 			break;
 	}
 	buff = ft_extract_env_vars(buff, env);
+	buff = ft_remove_delimiter(buff, av[2]);
 }
 
 int		main(int ac, char **av, char **env)
