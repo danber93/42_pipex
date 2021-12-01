@@ -20,7 +20,7 @@ int		openfile(char *filename, int mode)
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 }
 
-char	*getPath(char *cmd, char **env)
+char	*ft_get_path(char *cmd, char **env)
 {
 	char	*path;
 	char	*dir;
@@ -57,7 +57,7 @@ void	exec(char *cmd, char **env)
 	if (ft_pchr(args[0], '/') > -1)
 		path = args[0];
 	else
-		path = getPath(args[0], env);
+		path = ft_get_path(args[0], env);
 	// eseguo il comando
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
@@ -66,7 +66,6 @@ void	exec(char *cmd, char **env)
 	exit(127);
 }
 
-// void	redir(char *cmd, char **env, int fdin)
 void	redir(char *cmd, char **env)
 {
 	pid_t	pid;
@@ -86,6 +85,28 @@ void	redir(char *cmd, char **env)
 		dup2(pipefd[1], STDOUT);
 		// controllare se é necessario if (fdin == STDIN)
 		exec(cmd, env);
+	}
+}
+
+// void	redir_heredoc(char *buff, char *cmd, char **env)
+void	redir_heredoc(char *buff)
+{
+	pid_t	pid;
+	int		pipefd[2];
+
+	pipe(pipefd);
+	pid = fork();
+	if (pid)
+	{
+		close(pipefd[1]);
+		dup2(pipefd[0], STDIN);
+		waitpid(pid, NULL, 0);
+	}
+	else
+	{
+		close(pipefd[0]);
+		write(pipefd[1], buff, ft_strlen(buff));
+		exit(EXIT_SUCCESS);
 	}
 }
 
@@ -275,17 +296,18 @@ int		ft_is_delimiter(char *buff, char *del)
 void	ft_here_doc(int ac, char **av, char **env)
 {
 	ac = ac + 1;
+	ac = ac - 1;
 	// ------
 	char	*buff;
 	char	ch[2];
 	int		i;
+	int		fdout;
 	// if (ac <= 5)
 	// {
 	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
 	// 	exit(1);
 	// }
 	buff = NULL;
-	i = 0;
 	ft_print_here_doc(ac);
 	while(read(STDIN, ch, 1))
 	{
@@ -297,7 +319,13 @@ void	ft_here_doc(int ac, char **av, char **env)
 	}
 	buff = ft_extract_env_vars(buff, env);
 	buff = ft_remove_delimiter(buff, av[2]);
-	/* manca la parte di scrittura sul file */
+	redir_heredoc(buff);
+	fdout  = openfile(av[ac-1], OUTFILE);
+	dup2(fdout, STDOUT);
+	i = 3;
+	while (i < ac - 2)
+		redir(av[i++], env);
+	exec(av[i], env);
 }
 
 int		main(int ac, char **av, char **env)
@@ -313,7 +341,7 @@ int		main(int ac, char **av, char **env)
 	{
 		fdin = openfile(av[1], INFILE);
 		fdout  = openfile(av[ac-1], OUTFILE);
-  		dup2(fdin, STDIN);
+		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
 		while (i < ac - 2)
 			redir(av[i++], env);

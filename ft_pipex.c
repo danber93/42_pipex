@@ -20,7 +20,7 @@ int	openfile(char *filename, int mode)
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 }
 
-char	*getPath(char *cmd, char **env)
+char	*ft_get_path(char *cmd, char **env)
 {
 	char	*path;
 	char	*dir;
@@ -57,7 +57,7 @@ void	exec(char *cmd, char **env)
 	if (ft_pchr(args[0], '/') > -1)
 		path = args[0];
 	else
-		path = getPath(args[0], env);
+		path = ft_get_path(args[0], env);
 	// eseguo il comando
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
