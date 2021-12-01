@@ -168,16 +168,12 @@ char	*ft_replace(char *buff, char *env_val, int env_start, char *env_name) {
 		dest[i] = buff[i];
 		i++;
 	}
-	// stampiamo la dest
-	// printf("dest fase 1 = %s\n", dest);
 	j = 0;
 	while (j < ft_strlen(env_val))
 		dest[i++] = env_val[j++];
-	//printf("dest fase 2 = %s\n", dest);
 	k = env_start + ft_strlen(env_name) + 1;
 	while (buff[k])
 		dest[i++] = buff[k++];
-	//printf("dest fase 3 = %s\n", dest);
 	free(buff);
 	return dest;
 }
@@ -236,29 +232,49 @@ char *ft_remove_delimiter(char *buff, char *delimiter)
 	return dest;
 }
 
+void	ft_print_here_doc(int ac)
+{
+	int		i;
+	char	*pipe_hd;
+	char	*hd;
+
+	pipe_hd = "pipe heredoc> ";
+	hd = "heredoc> ";
+	i = 0;
+	if (ac >= 5)
+		while (i < 15)
+			write(1, &pipe_hd[i++], 1);
+	else
+		while (i < 9)
+			write(1, &hd[i++], 1);
+}
+
 void	ft_here_doc(int ac, char **av, char **env)
 {
-	// Questi solo per compilare, vanno eliminati
-	// av[0] = "4";
 	ac = ac + 1;
 	// ------
 	char	*buff;
 	char	ch[2];
-
+	int		i;
 	// if (ac <= 5)
 	// {
 	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
 	// 	exit(1);
 	// }
 	buff = NULL;
+	i = 0;
+	ft_print_here_doc(ac);
 	while(read(STDIN, ch, 1))
 	{
 		buff = ft_str_rall(buff, ch[0]);
-		if (ft_is_substr(buff, av[2]))
-			break;
+		if (ch[0] == '\n')
+			ft_print_here_doc(ac);
+		//if (ft_is_substr(buff, av[2]))
+			//	break;
 	}
 	buff = ft_extract_env_vars(buff, env);
 	buff = ft_remove_delimiter(buff, av[2]);
+	/* manca la parte di scrittura sul file */
 }
 
 int		main(int ac, char **av, char **env)
