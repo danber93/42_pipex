@@ -28,5 +28,13 @@ int		ft_strlen(char *str);
 char	*ft_calloc(size_t size, size_t count);
 char	*ft_strdup(char *s1);
 size_t	ft_is_space(char c);
+char	*ft_extract_env_vars(char *buff, char **env);
+char	*ft_remove_delimiter(char *buff, char *delimiter);
+void	ft_print_here_doc(int ac);
+void	redir_heredoc(char *buff);
+char	*ft_name_env(char *buff, int start_index, int len);
+char	*ft_get_value_env(char	*name, char **env);
+char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff);
+char	*ft_replace(char *buff, char *env_val, int env_start, char *env_name);
 
 #endif

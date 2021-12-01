@@ -22,3 +22,73 @@ char	*ft_strdup(char *src)
 	}
 	return (dest);
 }
+
+char	*ft_extract_env_vars(char *buff, char **env)
+{
+	int		d_index;
+	int		i;
+	int		j;
+	char	*name_env;
+	char	*value_env;
+
+	j = 0;
+	i = 0;
+	while (buff[j])
+	{
+		d_index = ft_pchr(buff, '$');
+		if (d_index > -1 && buff[d_index + 1])
+		{
+			d_index++;
+			while (buff[d_index + i] && !ft_is_space(buff[d_index + i]))
+				i++;
+			if (i > 0)
+			{
+				name_env = ft_name_env(buff, d_index, i);
+				value_env = ft_get_value_env(name_env, env);
+				buff = ft_replace(buff, value_env, d_index - 1, name_env);
+			}
+			i = 0;
+			j = d_index;
+		}
+		else
+			j++;
+	}
+	return (buff);
+}
+
+char	*ft_remove_delimiter(char *buff, char *delimiter)
+{
+	char	*dest;
+	int		delimiter_size;
+	int		i;
+	int		buff_size;
+
+	buff_size = ft_strlen(buff);
+	i = 0;
+	delimiter_size = ft_strlen(delimiter);
+	dest = ft_calloc(sizeof(char), (buff_size - delimiter_size));
+	while (i < (buff_size - delimiter_size))
+	{
+		dest[i] = buff[i];
+		i++;
+	}
+	free(buff);
+	return (dest);
+}
+
+void	ft_print_here_doc(int ac)
+{
+	int		i;
+	char	*pipe_hd;
+	char	*hd;
+
+	pipe_hd = "pipe heredoc> ";
+	hd = "heredoc> ";
+	i = 0;
+	if (ac >= 4)
+		while (i < 15)
+			write(1, &pipe_hd[i++], 1);
+	else
+		while (i < 9)
+			write(1, &hd[i++], 1);
+}

@@ -167,11 +167,3 @@ int		ft_is_substr(char *str, char* substr)
 	}
 	return (0);
 }
-
-// /* Select ENV var. 0 END, 1 found ONE so keep going */
-// char	*ft_extract_env_vars(char *buff, char **env)
-// {
-// 	buff = NULL;
-// 	env = NULL;
-// 	return NULL;
-// }
