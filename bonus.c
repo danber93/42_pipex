@@ -249,6 +249,29 @@ void	ft_print_here_doc(int ac)
 			write(1, &hd[i++], 1);
 }
 
+int		ft_is_delimiter(char *buff, char *del)
+{
+	int		del_len;
+	char	*new_del;
+	int		i = 0;
+
+	del_len = ft_strlen(del);
+	new_del = ft_calloc(sizeof(char), del_len + 2);
+	while (i < del_len + 2)
+	{
+		if (i == 0)
+			new_del[i] = '\n';
+		else if (i == del_len + 1)
+			new_del[i] = '\n';
+		else 
+			new_del[i] = del[i-1];
+		i++;
+	}
+	if (ft_is_substr(buff, new_del))
+		return (1);
+	return (0);
+}
+
 void	ft_here_doc(int ac, char **av, char **env)
 {
 	ac = ac + 1;
@@ -267,10 +290,10 @@ void	ft_here_doc(int ac, char **av, char **env)
 	while(read(STDIN, ch, 1))
 	{
 		buff = ft_str_rall(buff, ch[0]);
+		if (ft_is_delimiter(buff, av[2]))
+			break;
 		if (ch[0] == '\n')
 			ft_print_here_doc(ac);
-		//if (ft_is_substr(buff, av[2]))
-			//	break;
 	}
 	buff = ft_extract_env_vars(buff, env);
 	buff = ft_remove_delimiter(buff, av[2]);

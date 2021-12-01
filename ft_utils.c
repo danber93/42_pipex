@@ -147,21 +147,21 @@ char*	ft_str_rall(char *buff, char ch)
 	return (new);
 }
 
-/* Check if str2 is contained in str1 */
-int		ft_is_substr(char *str1, char* str2)
+/* Check if substr is contained in str */
+int		ft_is_substr(char *str, char* substr)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while(str1[i])
+	while(str[i])
 	{
 		j = 0;
-		while (str2[j] && str1[i+j] == str2[j])
+		while (substr[j] && str[i+j] == substr[j])
 		{
 				j++;
 		}
-		if (!str2[j])
+		if (!substr[j])
 			return (1);
 		i++;
 	}
