@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 10:16:02 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/02 10:16:04 by dbertill         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:31:10 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*ft_extract_env_vars(char *buff, char **env)
 	i = 0;
 	while (buff[j])
 	{
-		d_index = ft_pchr(buff, '$');
+		d_index = ft_index_of(buff, '$');
 		if (d_index > -1 && buff[d_index + 1])
 		{
 			d_index++;

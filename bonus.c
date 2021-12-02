@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:26:17 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/01 17:26:20 by dbertill         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:33:43 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	openfile(char *filename, int mode)
 		if (access(filename, F_OK))
 		{
 			write(STDERR, "pipex: no suh file or directory: ", 33);
-			write(STDERR, filename, ft_pchr(filename, 0));
+			write(STDERR, filename, ft_index_of(filename, 0));
 			exit(1);
 		}
 		return (open(filename, O_RDONLY));
@@ -37,14 +37,14 @@ void	exec(char *cmd, char **env)
 	char	*path;
 
 	args = ft_str_split(cmd, ' ');
-	if (ft_pchr(args[0], '/') > -1)
+	if (ft_index_of(args[0], '/') > -1)
 		path = args[0];
 	else
 		path = ft_get_path(args[0], env);
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
 	write(STDERR, "command not found: ", 20);
-	write(STDERR, cmd, ft_pchr(cmd, 0));
+	write(STDERR, cmd, ft_index_of(cmd, 0));
 	exit(127);
 }
 
@@ -85,7 +85,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 	ft_print_here_doc(ac);
 	while (read(STDIN, ch, 1))
 	{
-		buff = ft_str_rall(buff, ch[0]);
+		buff = ft_realloc(buff, ch[0]);
 		if (ft_is_delimiter(buff, av[2]))
 			break ;
 		if (ch[0] == '\n')
@@ -93,7 +93,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 	}
 	buff = ft_extract_env_vars(buff, env);
 	buff = ft_remove_delimiter(buff, av[2]);
-	redir_heredoc(buff);
+	ft_redir_heredoc(buff);
 	fdout = openfile(av[ac - 1], OUTFILE);
 	dup2(fdout, STDOUT);
 	i = 3;

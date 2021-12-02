@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 10:16:40 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/02 10:16:41 by dbertill         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:33:26 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_is_substr(char *str, char *substr)
 	return (0);
 }
 
-char	*ft_str_rall(char *buff, char ch)
+char	*ft_realloc(char *buff, char ch)
 {
 	char	*new;
 	int		len;

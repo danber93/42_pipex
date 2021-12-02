@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/02 10:15:53 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/02 10:15:55 by dbertill         ###   ########.fr       */
+/*   Created: 2021/12/02 10:15:53 by prulli            #+#    #+#             */
+/*   Updated: 2021/12/02 14:32:21 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_str_cmp(char *str1, char *str2)
 	return (1);
 }
 
-int	ft_pchr(char *str, char c)
+int	ft_index_of(char *str, char c)
 {
 	int	i;
 
@@ -61,13 +61,13 @@ char	*ft_str_ndup(char *str, unsigned int n)
 	return (duped);
 }
 
-char	*path_join(char *path, char *bin)
+char	*ft_join_path(char *path, char *bin)
 {
 	char	*full_path;
 	int		i;
 	int		j;
 
-	full_path = malloc(sizeof(char) * (ft_pchr(path, 0) + ft_pchr(bin, 0) + 2));
+	full_path = malloc(sizeof(char) * (ft_index_of(path, 0) + ft_index_of(bin, 0) + 2));
 	i = 0;
 	j = 0;
 	while (path[j])

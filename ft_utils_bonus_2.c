@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_bonus_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 10:16:08 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/02 10:16:09 by dbertill         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:33:43 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_pipex.h"
 
-void	redir_heredoc(char *buff)
+void	ft_redir_heredoc(char *buff)
 {
 	pid_t	pid;
 	int		pipefd[2];

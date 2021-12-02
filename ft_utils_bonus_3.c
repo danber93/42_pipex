@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_bonus_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 12:47:39 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/02 12:47:40 by dbertill         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:31:59 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,15 @@ char	*ft_get_path(char *cmd, char **env)
 	if (!env[i])
 		return (cmd);
 	path = env[i] + 5;
-	while (path && ft_pchr(path, ':') > -1)
+	while (path && ft_index_of(path, ':') > -1)
 	{
-		dir = ft_str_ndup(path, ft_pchr(path, ':'));
-		bin = path_join(dir, cmd);
+		dir = ft_str_ndup(path, ft_index_of(path, ':'));
+		bin = ft_join_path(dir, cmd);
 		free(dir);
 		if (access(bin, F_OK) == 0)
 			return (bin);
 		free(bin);
-		path += ft_pchr(path, ':') + 1;
+		path += ft_index_of(path, ':') + 1;
 	}
 	return (cmd);
 }

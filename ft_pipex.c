@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 10:16:13 by dbertill          #+#    #+#             */
-/*   Updated: 2021/12/02 10:16:14 by dbertill         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:31:59 by prulli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	openfile(char *filename, int mode)
 		if (access(filename, F_OK))
 		{
 			write(STDERR, "pipex: no suh file or directory: ", 33);
-			write(STDERR, filename, ft_pchr(filename, 0));
+			write(STDERR, filename, ft_index_of(filename, 0));
 			exit(1);
 		}
 		return (open(filename, O_RDONLY));
@@ -44,15 +44,15 @@ char	*ft_get_path(char *cmd, char **env)
 	if (!env[i])
 		return (cmd);
 	path = env[i] + 5;
-	while (path && ft_pchr(path, ':') > -1)
+	while (path && ft_index_of(path, ':') > -1)
 	{
-		dir = ft_str_ndup(path, ft_pchr(path, ':'));
-		bin = path_join(dir, cmd);
+		dir = ft_str_ndup(path, ft_index_of(path, ':'));
+		bin = ft_join_path(dir, cmd);
 		free(dir);
 		if (access(bin, F_OK) == 0)
 			return (bin);
 		free(bin);
-		path += ft_pchr(path, ':') + 1;
+		path += ft_index_of(path, ':') + 1;
 	}
 	return (cmd);
 }
@@ -63,14 +63,14 @@ void	exec(char *cmd, char **env)
 	char	*path;
 
 	args = ft_str_split(cmd, ' ');
-	if (ft_pchr(args[0], '/') > -1)
+	if (ft_index_of(args[0], '/') > -1)
 		path = args[0];
 	else
 		path = ft_get_path(args[0], env);
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
 	write(STDERR, "command not found: ", 20);
-	write(STDERR, cmd, ft_pchr(cmd, 0));
+	write(STDERR, cmd, ft_index_of(cmd, 0));
 	exit(127);
 }
 
