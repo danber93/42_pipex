@@ -20,42 +20,15 @@ int	openfile(char *filename, int mode)
 	{
 		if (access(filename, F_OK))
 		{
-			write(STDERR, "pipex: ", 7);
+			write(STDERR, "pipex: no suh file or directory: ", 33);
 			write(STDERR, filename, ft_pchr(filename, 0));
-			write(2, "File does not exist.\n", 7);
-			return (STDIN);
+			exit(1);
 		}
 		return (open(filename, O_RDONLY));
 	}
 	else
 		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-}
-
-char	*ft_get_path(char *cmd, char **env)
-{
-	char	*path;
-	char	*dir;
-	char	*bin;
-	int		i;
-
-	i = 0;
-	while (env[i] && ft_str_ncmp(env[i], "PATH=", 5))
-		i++;
-	if (!env[i])
-		return (cmd);
-	path = env[i] + 5;
-	while (path && ft_pchr(path, ':') > -1)
-	{
-		dir = ft_str_ndup(path, ft_pchr(path, ':'));
-		bin = path_join(dir, cmd);
-		free(dir);
-		if (access(bin, F_OK) == 0)
-			return (bin);
-		free(bin);
-		path += ft_pchr(path, ':') + 1;
-	}
-	return (cmd);
 }
 
 void	exec(char *cmd, char **env)
@@ -70,8 +43,8 @@ void	exec(char *cmd, char **env)
 		path = ft_get_path(args[0], env);
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
+	write(STDERR, "command not found: ", 20);
 	write(STDERR, cmd, ft_pchr(cmd, 0));
-	write(STDERR, ": command not found\n", 20);
 	exit(127);
 }
 
@@ -92,34 +65,8 @@ void	redir(char *cmd, char **env)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT);
-		// controllare se é necessario if (fdin == STDIN)
 		exec(cmd, env);
 	}
-}
-
-
-int	ft_is_delimiter(char *buff, char *del)
-{
-	int		del_len;
-	char	*new_del;
-	int		i;
-
-	del_len = ft_strlen(del);
-	new_del = ft_calloc(sizeof(char), del_len + 2);
-	i = 0;
-	while (i < del_len + 2)
-	{
-		if (i == 0)
-			new_del[i] = '\n';
-		else if (i == del_len + 1)
-			new_del[i] = '\n';
-		else
-			new_del[i] = del[i - 1];
-		i++;
-	}
-	if (ft_is_substr(buff, new_del))
-		return (1);
-	return (0);
 }
 
 void	ft_here_doc(int ac, char **av, char **env)

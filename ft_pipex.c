@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipex.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dbertill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/02 10:16:13 by dbertill          #+#    #+#             */
+/*   Updated: 2021/12/02 10:16:14 by dbertill         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_pipex.h"
 
 #include <stdio.h>
@@ -8,10 +20,9 @@ int	openfile(char *filename, int mode)
 	{
 		if (access(filename, F_OK))
 		{
-			write(STDERR, "pipex: ", 7);
+			write(STDERR, "pipex: no suh file or directory: ", 33);
 			write(STDERR, filename, ft_pchr(filename, 0));
-			write(2, "File does not exist.\n", 7);
-			return (STDIN);
+			exit(1);
 		}
 		return (open(filename, O_RDONLY));
 	}
@@ -26,9 +37,9 @@ char	*ft_get_path(char *cmd, char **env)
 	char	*dir;
 	char	*bin;
 	int		i;
-	
+
 	i = 0;
-	while(env[i] && ft_str_ncmp(env[i], "PATH=", 5))
+	while (env[i] && ft_str_ncmp(env[i], "PATH=", 5))
 		i++;
 	if (!env[i])
 		return (cmd);
@@ -51,27 +62,25 @@ void	exec(char *cmd, char **env)
 	char	**args;
 	char	*path;
 
-	// preparazione del args
 	args = ft_str_split(cmd, ' ');
-	// se il primo argomento ha uno '/' vuol dire che é stato specificato e il path, e quindi non serve costruirselo
 	if (ft_pchr(args[0], '/') > -1)
 		path = args[0];
 	else
 		path = ft_get_path(args[0], env);
-	// eseguo il comando
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
+	write(STDERR, "command not found: ", 20);
 	write(STDERR, cmd, ft_pchr(cmd, 0));
-	write(STDERR, ": command not found\n", 20);
 	exit(127);
 }
 
 // void	redir(char *cmd, char **env, int fdin)
-void	redir(char *cmd, char **env)
+void	redir(char *cmd, char **env, int fdin)
 {
 	pid_t	pid;
 	int		pipefd[2];
 
+	fdin = 1;
 	pipe(pipefd);
 	pid = fork();
 	if (pid)
@@ -84,12 +93,11 @@ void	redir(char *cmd, char **env)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT);
-		// controllare se é necessario if (fdin == STDIN)
 		exec(cmd, env);
 	}
 }
 
-int		main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
 	int	fdin;
 	int	fdout;
@@ -97,11 +105,10 @@ int		main(int ac, char **av, char **env)
 	if (ac == 5)
 	{
 		fdin = openfile(av[1], INFILE);
-		fdout  = openfile(av[4], OUTFILE);
-  		dup2(fdin, STDIN);
+		fdout = openfile(av[4], OUTFILE);
+		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
-		// redir(av[2], env, fdin);
-		redir(av[2], env);
+		redir(av[2], env, fdin);
 		exec(av[3], env);
 	}
 	else

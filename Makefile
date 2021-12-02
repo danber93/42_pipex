@@ -6,11 +6,11 @@ CFLAGS = -Wall -Wextra -Werror
 
 HEADER = ft_pipex.h
 
-SRC = ft_pipex.c ft_utils.c
+SRC = ft_pipex.c ft_utils.c ft_utils_2.c
 
 OBJ = $(SRC:c=o)
 
-SRCB = bonus.c ft_utils.c ft_utils_bonus.c ft_utils_bonus_2.c
+SRCB = bonus.c ft_utils.c ft_utils_2.c ft_utils_bonus.c ft_utils_bonus_2.c ft_utils_bonus_3.c
 
 OBJB = $(SRCB:c=o)
 

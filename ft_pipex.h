@@ -36,5 +36,11 @@ char	*ft_name_env(char *buff, int start_index, int len);
 char	*ft_get_value_env(char	*name, char **env);
 char	*ft_env_filling(char *buff, char *env_val, int env_start, int diff);
 char	*ft_replace(char *buff, char *env_val, int env_start, char *env_name);
+int	ft_is_delimiter(char *buff, char *del);
+char	*ft_get_path(char *cmd, char **env);
+int	ft_is_substr(char *str, char *substr);
+char	*ft_str_rall(char *buff, char ch);
+char	*ft_calloc(size_t size, size_t count);
+
 
 #endif
