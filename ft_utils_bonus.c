@@ -18,21 +18,20 @@ size_t	ft_is_space(char c)
 		|| c == '\f');
 }
 
-char	*ft_strdup(char *src)
+char	*ft_replace_var(char *buff, char **env, int i, int d_index)
 {
-	char	*dest;
-	size_t	len;
-	size_t	i;
+	char	*name_env;
+	char	*value_env;
 
-	len = ft_strlen(src);
-	dest = ft_calloc(sizeof(char), len);
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
+	while (buff[d_index + i] && !ft_is_space(buff[d_index + i]))
 		i++;
+	if (i > 0)
+	{
+		name_env = ft_name_env(buff, d_index, i);
+		value_env = ft_get_value_env(name_env, env);
+		buff = ft_replace(buff, value_env, d_index - 1, name_env);
 	}
-	return (dest);
+	return (buff);
 }
 
 char	*ft_extract_env_vars(char *buff, char **env)
@@ -40,25 +39,16 @@ char	*ft_extract_env_vars(char *buff, char **env)
 	int		d_index;
 	int		i;
 	int		j;
-	char	*name_env;
-	char	*value_env;
 
 	j = 0;
 	i = 0;
 	while (buff[j])
 	{
-		d_index = ft_index_of(buff, '$');
+		d_index = ft_strchr(buff, '$');
 		if (d_index > -1 && buff[d_index + 1])
 		{
 			d_index++;
-			while (buff[d_index + i] && !ft_is_space(buff[d_index + i]))
-				i++;
-			if (i > 0)
-			{
-				name_env = ft_name_env(buff, d_index, i);
-				value_env = ft_get_value_env(name_env, env);
-				buff = ft_replace(buff, value_env, d_index - 1, name_env);
-			}
+			buff = ft_replace_var(buff, env, i, d_index);
 			i = 0;
 			j = d_index;
 		}

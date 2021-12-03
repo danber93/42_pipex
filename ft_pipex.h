@@ -16,7 +16,7 @@
 # define OUTFILE 1
 
 int		ft_str_ncmp (char *str1, char *str2, int n);
-int		ft_index_of (char *str, char c);
+int		ft_strchr (char *str, char c);
 char	*ft_str_ndup (char *str, unsigned int n);
 char	*ft_join_path (char *path, char *bin);
 char	**ft_str_split (char *str, char div);

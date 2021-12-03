@@ -36,7 +36,7 @@ int	ft_str_cmp(char *str1, char *str2)
 	return (1);
 }
 
-int	ft_index_of(char *str, char c)
+int	ft_strchr(char *str, char c)
 {
 	int	i;
 
@@ -67,7 +67,8 @@ char	*ft_join_path(char *path, char *bin)
 	int		i;
 	int		j;
 
-	full_path = malloc(sizeof(char) * (ft_index_of(path, 0) + ft_index_of(bin, 0) + 2));
+	full_path = malloc(sizeof(char) * (ft_strchr(path, 0)
+				+ ft_strchr(bin, 0) + 2));
 	i = 0;
 	j = 0;
 	while (path[j])

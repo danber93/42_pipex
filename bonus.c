@@ -14,14 +14,14 @@
 
 #include <stdio.h>
 
-int	openfile(char *filename, int mode)
+int	open_file(char *filename, int mode)
 {
 	if (mode == 0)
 	{
 		if (access(filename, F_OK))
 		{
 			write(STDERR, "pipex: no suh file or directory: ", 33);
-			write(STDERR, filename, ft_index_of(filename, 0));
+			write(STDERR, filename, ft_strchr(filename, 0));
 			exit(1);
 		}
 		return (open(filename, O_RDONLY));
@@ -37,14 +37,14 @@ void	exec(char *cmd, char **env)
 	char	*path;
 
 	args = ft_str_split(cmd, ' ');
-	if (ft_index_of(args[0], '/') > -1)
+	if (ft_strchr(args[0], '/') > -1)
 		path = args[0];
 	else
 		path = ft_get_path(args[0], env);
 	execve(path, args, env);
 	write(STDERR, "pipex: ", 7);
 	write(STDERR, "command not found: ", 20);
-	write(STDERR, cmd, ft_index_of(cmd, 0));
+	write(STDERR, cmd, ft_strchr(cmd, 0));
 	exit(127);
 }
 
@@ -76,11 +76,6 @@ void	ft_here_doc(int ac, char **av, char **env)
 	int		i;
 	int		fdout;
 
-	// if (ac <= 5)
-	// {
-	// 	write(STDERR, "Here_doc. Invalid number  of arguments.\n", 29);
-	// 	exit(1);
-	// }
 	buff = NULL;
 	ft_print_here_doc(ac);
 	while (read(STDIN, ch, 1))
@@ -94,7 +89,7 @@ void	ft_here_doc(int ac, char **av, char **env)
 	buff = ft_extract_env_vars(buff, env);
 	buff = ft_remove_delimiter(buff, av[2]);
 	ft_redir_heredoc(buff);
-	fdout = openfile(av[ac - 1], OUTFILE);
+	fdout = open_file(av[ac - 1], OUTFILE);
 	dup2(fdout, STDOUT);
 	i = 3;
 	while (i < ac - 2)
@@ -109,12 +104,12 @@ int	main(int ac, char **av, char **env)
 	int	i;
 
 	i = 2;
-	if (av[1] && ft_str_cmp(av[1], "here_doc"))
+	if (av[1] && ft_str_cmp(av[1], "here_doc") && ac >= 4)
 		ft_here_doc(ac, av, env);
 	else if (ac >= 5)
 	{
-		fdin = openfile(av[1], INFILE);
-		fdout = openfile(av[ac - 1], OUTFILE);
+		fdin = open_file(av[1], INFILE);
+		fdout = open_file(av[ac - 1], OUTFILE);
 		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
 		while (i < ac - 2)

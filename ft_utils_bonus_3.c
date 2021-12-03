@@ -49,15 +49,32 @@ char	*ft_get_path(char *cmd, char **env)
 	if (!env[i])
 		return (cmd);
 	path = env[i] + 5;
-	while (path && ft_index_of(path, ':') > -1)
+	while (path && ft_strchr(path, ':') > -1)
 	{
-		dir = ft_str_ndup(path, ft_index_of(path, ':'));
+		dir = ft_str_ndup(path, ft_strchr(path, ':'));
 		bin = ft_join_path(dir, cmd);
 		free(dir);
 		if (access(bin, F_OK) == 0)
 			return (bin);
 		free(bin);
-		path += ft_index_of(path, ':') + 1;
+		path += ft_strchr(path, ':') + 1;
 	}
 	return (cmd);
+}
+
+char	*ft_strdup(char *src)
+{
+	char	*dest;
+	size_t	len;
+	size_t	i;
+
+	len = ft_strlen(src);
+	dest = ft_calloc(sizeof(char), len);
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	return (dest);
 }
