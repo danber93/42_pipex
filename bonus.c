@@ -12,8 +12,6 @@
 
 #include "ft_pipex.h"
 
-#include <stdio.h>
-
 int	open_file(char *filename, int mode)
 {
 	if (mode == 0)
