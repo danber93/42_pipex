@@ -69,7 +69,7 @@ char	*ft_remove_delimiter(char *buff, char *delimiter)
 	i = 0;
 	delimiter_size = ft_strlen(delimiter);
 	dest = ft_calloc(sizeof(char), (buff_size - delimiter_size));
-	while (i < (buff_size - delimiter_size))
+	while (i < (buff_size - delimiter_size - 1))
 	{
 		dest[i] = buff[i];
 		i++;
