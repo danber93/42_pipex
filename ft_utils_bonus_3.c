@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_bonus_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prulli <prulli@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dbertill <dbertill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/03 18:16:55 by prulli            #+#    #+#             */
-/*   Updated: 2021/12/03 18:16:56 by prulli           ###   ########.fr       */
+/*   Created: 2021/12/06 20:49:52 by dbertill          #+#    #+#             */
+/*   Updated: 2021/12/08 17:32:13 by dbertill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_pipex.h"
+
+/* First row is ONLY delimiter, then return TRUE, else FALSE */
+int	ft_first_row_del(char *buff, char *del)
+{
+	int	i;
+
+	i = 0;
+	while (del[i])
+	{
+		if (buff[i] != del[i])
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	ft_is_delimiter(char *buff, char *del)
 {
@@ -18,6 +33,8 @@ int	ft_is_delimiter(char *buff, char *del)
 	char	*new_del;
 	int		i;
 
+	if (ft_first_row_del(buff, del))
+		return (1);
 	del_len = ft_strlen(del);
 	new_del = ft_calloc(sizeof(char), del_len + 2);
 	i = 0;
@@ -32,7 +49,11 @@ int	ft_is_delimiter(char *buff, char *del)
 		i++;
 	}
 	if (ft_is_substr(buff, new_del))
+	{
+		free(new_del);
 		return (1);
+	}
+	free(new_del);
 	return (0);
 }
 
